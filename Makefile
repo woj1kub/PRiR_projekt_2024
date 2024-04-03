@@ -16,7 +16,7 @@ target := $(buildDir)/$(executable)
 sources := $(call rwildcard,src/,*.cpp)
 objects := $(patsubst src/%, $(buildDir)/%, $(patsubst %.cpp, %.o, $(sources)))
 depends := $(patsubst %.o, %.d, $(objects))
-compileFlags := -std=c++17 -I include
+compileFlags := -g -std=c++17 -I include
 linkFlags = -L lib/$(platform) -l raylib
 
 # Check for Windows
@@ -97,5 +97,5 @@ execute:
 	$(target) $(ARGS)
 
 # Clean up all relevant files
-clean:
-	$(RM) $(call platformpth, $(buildDir)/*)
+# clean:
+# 	$(RM) $(call platformpth, $(buildDir)/*)
