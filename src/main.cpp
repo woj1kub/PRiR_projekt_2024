@@ -1,4 +1,7 @@
 #include <raylib-cpp.hpp>
+#include <vector>
+#include "headers/game.h"
+
 
 int main() {
     
@@ -16,6 +19,8 @@ int main() {
     
     SetTargetFPS(60);
 
+        
+
     // Main game loop
     while (!w.ShouldClose()) // Detect window close button or ESC key
     {
@@ -26,7 +31,6 @@ int main() {
         // Draw
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        textColor.DrawText("Congrats! You created your first window!", 190, 200, 20);
         EndDrawing();
     }
 
