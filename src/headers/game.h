@@ -44,4 +44,6 @@ class GameCell
         short posX;
         short posY;
         Building building;
+
+        bool hasBuilding();
 };
