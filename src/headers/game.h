@@ -1,3 +1,5 @@
+#include <raylib-cpp.hpp>
+
 #define CellSize 50
 class Building { // To jest traktowane jako pusta 
     protected:
