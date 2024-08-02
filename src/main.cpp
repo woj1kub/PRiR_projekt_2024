@@ -2,7 +2,8 @@
 #include <vector>
 #include "headers/game.h"
 using namespace std;
-int main() {
+int main()
+{
     // Initialization
     int screenWidth = 1600;
     int screenHeight = 900;
@@ -12,12 +13,12 @@ int main() {
 
     InitAudioDevice();
 
-    Sound bgMusic = LoadSound("assets/audio/chipi.wav"); 
+    Sound bgMusic = LoadSound("assets/audio/chipi.wav");
     PlaySound(bgMusic);
-    
-    Camera2D camera = { 0 };
-    camera.target = { screenWidth / 2.0f,screenHeight / 2.0f }; // Jest to tak ustawione aby był kwadrat 0,0 w górnym lewym rogu 
-    camera.offset = { screenWidth / 2.0f, screenHeight / 2.0f };
+
+    Camera2D camera = {0};
+    camera.target = {screenWidth / 2.0f, screenHeight / 2.0f}; // Jest to tak ustawione aby był kwadrat 0,0 w górnym lewym rogu
+    camera.offset = {screenWidth / 2.0f + 300, screenHeight / 2.0f + 50};
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 
@@ -28,8 +29,8 @@ int main() {
     {
         for (size_t j = 0; j < columns; j++)
         {
-            map.push_back(GameCell(i,j));
-        }   
+            map.push_back(GameCell(i, j));
+        }
     }
     map[10].setHome();
     map[11].setShop();
@@ -37,9 +38,10 @@ int main() {
     map[13].setRoad(0b0011);
     map[14].setRoad(0b0111);
     map[15].setRoad(0b1111);
-   
+    map[16].setRoad(0b0);
+
     SetTargetFPS(60);
-     // Main game loop
+    // Main game loop
     while (!w.ShouldClose()) // Detect window close button or ESC key
     {
         // Update
@@ -47,15 +49,15 @@ int main() {
 
         // Draw
         BeginDrawing();
-            ClearBackground(RAYWHITE);
-            BeginMode2D(camera);
+        ClearBackground(RAYWHITE);
+        BeginMode2D(camera);
 
-                for (auto &&i : map)
-                {
-                    i.drawCell();
-                }
-                
-            EndMode2D();
+        for (auto &&i : map) // To można zostawić
+        {
+            i.drawCell();
+        }
+
+        EndMode2D();
         EndDrawing();
     }
 
