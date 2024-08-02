@@ -65,3 +65,54 @@ void Road::drawBuilding(short x, short y)
         DrawLineEx({(float)centerX, (float)centerY}, {(float)((x * CellSize) + CellSize), (float)centerY}, sizeRoad, BLACK); // w prawo
     }
 }
+
+GameCell::GameCell(short X, short Y)
+    : posX(X), posY(Y), building(new Building()) {}
+
+GameCell::GameCell(GameCell&& other) noexcept
+    : posX(other.posX), posY(other.posY), building(other.building) {
+    other.building = nullptr;
+}
+
+GameCell& GameCell::operator=(GameCell&& other) noexcept {
+    if (this != &other) {
+        std::unique_lock<std::mutex> lock1(lockBuilding, std::defer_lock);
+        std::unique_lock<std::mutex> lock2(other.lockBuilding, std::defer_lock);
+        std::lock(lock1, lock2);
+
+        delete building;
+        posX = other.posX;
+        posY = other.posY;
+        building = other.building;
+        other.building = nullptr;
+    }
+    return *this;
+}
+
+GameCell::~GameCell() {
+    std::lock_guard<std::mutex> lock(lockBuilding);
+    delete building;
+}
+
+void GameCell::drawCell() {
+    std::lock_guard<std::mutex> lock(lockBuilding);
+    building->drawBuilding(posX, posY);
+}
+
+void GameCell::setHome() {
+    std::lock_guard<std::mutex> lock(lockBuilding);
+    delete building;
+    building = new Home();
+}
+
+void GameCell::setShop() {
+    std::lock_guard<std::mutex> lock(lockBuilding);
+    delete building;
+    building = new Shop();
+}
+
+void GameCell::setRoad(char roads) {
+    std::lock_guard<std::mutex> lock(lockBuilding);
+    delete building;
+    building = new Road(roads);
+}

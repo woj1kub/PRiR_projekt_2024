@@ -1,6 +1,7 @@
 #include <raylib-cpp.hpp>
 #include <mutex>
-
+#ifndef GAME
+#define GAME
 #define CellSize 50
 class Building
 { // To jest traktowane jako pusta
@@ -10,6 +11,8 @@ protected:
 public:
     // Rysowanie pustej planszy
     virtual void drawBuilding(short x, short y);
+    virtual ~Building() = default;
+
 };
 
 class Shop : public Building
@@ -40,43 +43,23 @@ public:
 class GameCell
 {
 public:
+    GameCell(const GameCell&) = delete; // No copying
+    GameCell& operator=(const GameCell&) = delete; // No copying
+    GameCell(GameCell&& other) noexcept; // Move constructor
+    GameCell& operator=(GameCell&& other) noexcept; // Move assignment operator
+    ~GameCell();
+
+    GameCell(short X, short Y);
+    bool hasBuilding();
+    void drawCell();
+    void setHome();
+    void setShop();
+    void setRoad(char roads);
+
+private:
     short posX;
     short posY;
     Building *building;
     std::mutex lockBuilding;
-    bool hasBuilding();
-    GameCell(short X, short Y)
-    {
-
-        posX = X;
-        posY = Y;
-        building = new Building();
-    }
-    void drawCell()
-    {
-        std::unique_lock<std::mutex> lock(lockBuilding);
-        building->drawBuilding(posX, posY);
-        lock.unlock();
-    }
-    void setHome()
-    {
-        std::unique_lock<std::mutex> lock(lockBuilding);
-        delete building;
-        building = new Home();
-        lock.unlock();
-    }
-    void setShop()
-    {
-        std::unique_lock<std::mutex> lock(lockBuilding);
-        delete building;
-        building = new Shop();
-        lock.unlock();
-    }
-    void setRoad(char roads)
-    {
-        std::unique_lock<std::mutex> lock(lockBuilding);
-        delete building;
-        building = new Road(roads);
-        lock.unlock();
-    }
 };
+#endif // GAME
