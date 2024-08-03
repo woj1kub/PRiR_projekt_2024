@@ -7,20 +7,20 @@
 
 using namespace std;
 // Zmienne globalne ~ nazwy tymczasowe
-atomic<bool> running(true);
-mutex mapLock;
+atomic<bool> running(true); // To jest potrzebne aby po działaniu logic() można wyłączyć
+mutex mapLock;              // Zabezpiecznie przed działaniem na mapie
 
-size_t rows = 20;
-size_t columns = 15;
+size_t rows = 20;    // Ilość elemtów w wierszu
+size_t columns = 15; // Ilość elementów w kolumnie
 
-vector<GameCell> map;
+vector<GameCell> map; 
 
-float offSetTargetWidth = -300;
-float offSetTargetHeight = -50;
+// To jest offset potrzebny aby było mniejwięcej po środku
+// Jak ktoś się chce pobawić bo nie wiem czy kamera jest 100% dobrze
+float offSetTargetWidth = -300.0f;
+float offSetTargetHeight = -50.0f;
 
-int screenWidth = 1600;
-int screenHeight = 900;
-
+// To jak chcecie można przeżucyć do własnego pliku
 void logic()
 {
     while (running.load())
@@ -38,6 +38,8 @@ void logic()
         }
 
         // Auktulizacja dróg
+        // To mozna przerobić na równoległe
+        // Podzielić na wiersze lub kolumny ~ żeby było że zostało wykorzystane
         for (int i = 0; i < rows * columns; i++)
         {
             if (map[i].isRoad())
@@ -83,6 +85,8 @@ int main()
 {
     // Initialization
 
+    int screenWidth = 1600;
+    int screenHeight = 900;
     raylib::Color textColor(LIGHTGRAY);
     raylib::Window w(screenWidth, screenHeight, "Raylib C++ Starter Kit Example");
 
@@ -96,7 +100,7 @@ int main()
     camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
-
+    // Inicjalizacja tabeli/mapy
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < columns; j++)
@@ -105,6 +109,8 @@ int main()
         }
     }
 
+    // Przykładowe użycie 
+    // Można zrobić tutaj początkowy stan mapy
     map[10].setHome();
     map[11].setShop();
     map[12].setRoad(0b0001);
@@ -122,6 +128,7 @@ int main()
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode2D(camera);
+        // Rysowanie całej mapy
         {
             lock_guard<mutex> guard(mapLock);
 
@@ -133,6 +140,7 @@ int main()
         EndMode2D();
         EndDrawing();
     }
+    // Zamykanie programu - czynności związane z zamykaniem programu
     running.store(false);
     logicThread.join();
     UnloadSound(bgMusic);
