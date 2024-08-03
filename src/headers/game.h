@@ -12,7 +12,6 @@ public:
     // Rysowanie pustej planszy
     virtual void drawBuilding(short x, short y);
     virtual ~Building() = default;
-
 };
 
 class Shop : public Building
@@ -43,18 +42,24 @@ public:
 class GameCell
 {
 public:
-    GameCell(const GameCell&) = delete; // No copying
-    GameCell& operator=(const GameCell&) = delete; // No copying
-    GameCell(GameCell&& other) noexcept; // Move constructor
-    GameCell& operator=(GameCell&& other) noexcept; // Move assignment operator
+    GameCell(const GameCell &) = delete;            // No copying
+    GameCell &operator=(const GameCell &) = delete; // No copying
+    GameCell(GameCell &&other) noexcept;            // Move constructor
+    GameCell &operator=(GameCell &&other) noexcept; // Move assignment operator
     ~GameCell();
 
     GameCell(short X, short Y);
     bool hasBuilding();
+    bool isRoad()
+    {
+        return typeid(*building) == typeid(Road);
+    }
     void drawCell();
     void setHome();
     void setShop();
     void setRoad(char roads);
+    short getPosX() { return posX; }
+    short getPosY() { return posY; }
 
 private:
     short posX;

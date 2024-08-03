@@ -2,7 +2,7 @@
 
 bool GameCell::hasBuilding()
 {
-    return 0;
+    return typeid(*building) != typeid(Building);
 }
 
 void Building::drawBuilding(short x, short y)
@@ -69,13 +69,16 @@ void Road::drawBuilding(short x, short y)
 GameCell::GameCell(short X, short Y)
     : posX(X), posY(Y), building(new Building()) {}
 
-GameCell::GameCell(GameCell&& other) noexcept
-    : posX(other.posX), posY(other.posY), building(other.building) {
+GameCell::GameCell(GameCell &&other) noexcept
+    : posX(other.posX), posY(other.posY), building(other.building)
+{
     other.building = nullptr;
 }
 
-GameCell& GameCell::operator=(GameCell&& other) noexcept {
-    if (this != &other) {
+GameCell &GameCell::operator=(GameCell &&other) noexcept
+{
+    if (this != &other)
+    {
         std::unique_lock<std::mutex> lock1(lockBuilding, std::defer_lock);
         std::unique_lock<std::mutex> lock2(other.lockBuilding, std::defer_lock);
         std::lock(lock1, lock2);
@@ -89,29 +92,34 @@ GameCell& GameCell::operator=(GameCell&& other) noexcept {
     return *this;
 }
 
-GameCell::~GameCell() {
+GameCell::~GameCell()
+{
     std::lock_guard<std::mutex> lock(lockBuilding);
     delete building;
 }
 
-void GameCell::drawCell() {
+void GameCell::drawCell()
+{
     std::lock_guard<std::mutex> lock(lockBuilding);
     building->drawBuilding(posX, posY);
 }
 
-void GameCell::setHome() {
+void GameCell::setHome()
+{
     std::lock_guard<std::mutex> lock(lockBuilding);
     delete building;
     building = new Home();
 }
 
-void GameCell::setShop() {
+void GameCell::setShop()
+{
     std::lock_guard<std::mutex> lock(lockBuilding);
     delete building;
     building = new Shop();
 }
 
-void GameCell::setRoad(char roads) {
+void GameCell::setRoad(char roads)
+{
     std::lock_guard<std::mutex> lock(lockBuilding);
     delete building;
     building = new Road(roads);

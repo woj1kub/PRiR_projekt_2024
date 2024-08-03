@@ -30,13 +30,52 @@ void logic()
         {
             Vector2 mousePosition = GetMousePosition();
             int pos = ((int)(mousePosition.y + offSetTargetHeight) / CellSize) + (columns * ((int)(mousePosition.x + offSetTargetWidth) / CellSize));
-            map[pos].setHome();
-            cout << mousePosition.x << endl;
-            cout << mousePosition.y << endl;
+            char roads = 0b0;
+            if (!map[pos].hasBuilding())
+            {
+                map[pos].setRoad(0);
+            }
         }
-        
 
-        // Tutaj dodać sprawdzanie sąsiadów dla dróg. Można to zrobić jeśli jest aktulizowana "map"
+        // Auktulizacja dróg
+        for (int i = 0; i < rows * columns; i++)
+        {
+            if (map[i].isRoad())
+            {
+                char road = 0b0;
+                int position = (map[i].getPosY()) + ((map[i].getPosX()) * columns);
+
+                // prawa
+                int neighborPos = position + columns;
+                if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosX() < rows)
+                {
+                    road += map[neighborPos].hasBuilding() ? 0b1000 : 0;
+                }
+
+                // Lewa
+                neighborPos = position - columns;
+                if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosX() > 0)
+                {
+                    road += map[neighborPos].hasBuilding() ? 0b0100 : 0;
+                }
+
+                // Góra
+                neighborPos = position - 1;
+                if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosY() > 0)
+                {
+                    road += map[neighborPos].hasBuilding() ? 0b0001 : 0;
+                }
+
+                // Dół
+                neighborPos = position + 1;
+                if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosY() < columns - 1)
+                {
+                    road += map[neighborPos].hasBuilding() ? 0b0010 : 0;
+                }
+
+                map[i].setRoad(road);
+            }
+        }
     }
 }
 
