@@ -63,6 +63,12 @@ public:
         lock_guard<mutex> lock(lockBuilding);
         return typeid(*building) == typeid(Road);
     }
+    bool isRoadOrEmpty()
+    {
+        lock_guard<mutex> lock(lockBuilding);
+        return typeid(*building) == typeid(Road) 
+            || typeid(*building) == typeid(Building);
+    }
     void drawCell();
     void setHome();
     void setShop();

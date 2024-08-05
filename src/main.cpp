@@ -3,15 +3,15 @@
 #include "headers/game.h"
 #include "headers/global.h"
 #include "headers/logic.h"
+#include "headers/cell_generation.h"
 #include <iostream>
 #include <thread>
 #include <atomic>
 
 using namespace std;
-// Zmienne globalne ~ nazwy tymczasowe 
+// Zmienne globalne ~ nazwy tymczasowe
 // Zmienna globalne znajdują się w global.h
 // Logic znajduje się w logic.h
-
 
 int main()
 {
@@ -53,6 +53,7 @@ int main()
 
     SetTargetFPS(60);
     thread logicThread(logic);
+    thread generateCellThread(generate_cell);
     // Main game loop
     while (!w.ShouldClose()) // Detect window close button or ESC key
     {
@@ -75,6 +76,7 @@ int main()
     // Zamykanie programu - czynności związane z zamykaniem programu
     running.store(false);
     logicThread.join();
+    generateCellThread.join();
     UnloadSound(bgMusic);
     CloseAudioDevice();
 

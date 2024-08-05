@@ -2,19 +2,23 @@
 void logic()
 {
     double lastTimeUpdatedRoads = GetTime();          // Pobranie początkowego czasu
-    const double intervalForUpdateRoads = 5.0 / 60.0; // Interwał co 10 klatek (60 FPS / 10 = 6 FPS)
+    const double intervalForUpdateRoads = 5.0 / 60.0; // Interwał co 5 klatek
 
     while (running.load())
     {
-        lock_guard<mutex> guard(mapLock);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
+            lock_guard<mutex> guard(mapLock);
             Vector2 mousePosition = GetMousePosition();
             int pos = ((int)(mousePosition.y + offSetTargetHeight) / CellSize) + (columns * ((int)(mousePosition.x + offSetTargetWidth) / CellSize));
-            char roads = 0b0;
-            if (!map[pos].hasBuilding())
+
+            int max = rows * columns;
+            if (pos < columns * rows && pos >= 0)
             {
-                map[pos].setRoad(0);
+                if (!map[pos].hasBuilding())
+                {
+                    map[pos].setRoad(0);
+                }
             }
         }
 
@@ -26,6 +30,7 @@ void logic()
 
         if (currentTime - lastTimeUpdatedRoads >= intervalForUpdateRoads)
         {
+            lock_guard<mutex> guard(mapLock);
             for (int i = 0; i < rows * columns; i++)
             {
                 if (map[i].isRoad())

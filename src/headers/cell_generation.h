@@ -1,3 +1,6 @@
 #include "game.h"
-
-void generate_cell(GameCell* array, short sizeX, short sizeY);
+#include "global.h"
+#ifndef GENERATE_CELL
+#define GENERATE_CELL
+void generate_cell();
+#endif // GENERATE CELL
