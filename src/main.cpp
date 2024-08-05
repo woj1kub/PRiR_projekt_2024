@@ -55,6 +55,7 @@ int main()
     thread logicThread(logic);
     thread generateCellThread(generate_cell);
     // Main game loop
+
     while (!w.ShouldClose()) // Detect window close button or ESC key
     {
         // Draw
@@ -69,6 +70,11 @@ int main()
             {
                 i.drawCell();
             }
+        }
+        {
+            lock_guard<mutex> guardTime(timeMutex);
+            string timeString = to_string(timeInt);
+            DrawText(timeString.c_str(), -60, 0, 50.0f, BLACK);
         }
         EndMode2D();
         EndDrawing();

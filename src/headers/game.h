@@ -50,6 +50,7 @@ private:
     mutex lockBuilding;
 
 public:
+    // To jest zrobione aby działało :)
     GameCell(const GameCell &) = delete;            // No copying
     GameCell &operator=(const GameCell &) = delete; // No copying
     GameCell(GameCell &&other) noexcept;            // Move constructor
@@ -66,8 +67,7 @@ public:
     bool isRoadOrEmpty()
     {
         lock_guard<mutex> lock(lockBuilding);
-        return typeid(*building) == typeid(Road) 
-            || typeid(*building) == typeid(Building);
+        return typeid(*building) == typeid(Road) || typeid(*building) == typeid(Building);
     }
     void drawCell();
     void setHome();

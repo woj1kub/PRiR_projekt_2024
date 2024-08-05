@@ -13,13 +13,14 @@ void generate_cell()
         if (currentTime - lastTimeUpdatedBuildings >= intervalForUpdateBuildings)
         {
             lock_guard<mutex> guard(mapLock);
-
+            // Tu można zrobić kopie mapy i robić na niej szukanie pozycji
             int positionOfNextBuilding;
             do
             {
                 positionOfNextBuilding = generate_random_number(0, rows * columns);
             } while (!map[positionOfNextBuilding].isRoadOrEmpty());
 
+            // Ale tutaj już pracować na globalnej mapie
             if (countOfBuildings % houseNumberPerOneShop == 0)
             {
                 map[positionOfNextBuilding].setShop();

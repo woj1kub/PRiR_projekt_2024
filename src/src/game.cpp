@@ -44,7 +44,7 @@ void Road::drawBuilding(short x, short y)
     // Rysowanie w zależności od bitów w zmiennej 'roads'
     if (roads == 0)
     {
-        DrawCircle(centerX, centerY, sizeRoad * 1.5f, BLACK);
+        DrawCircle(centerX, centerY, sizeRoad * 1.3f, BLACK);
     }
 
     if (roads & 0x01) // pierwszy bit

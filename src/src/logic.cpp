@@ -2,10 +2,13 @@
 void logic()
 {
     double lastTimeUpdatedRoads = GetTime();          // Pobranie początkowego czasu
+    double lastTimeUpdatedTime = GetTime();           // Pobranie początkowego czasu
     const double intervalForUpdateRoads = 5.0 / 60.0; // Interwał co 5 klatek
+    const double intervalForUpdateTime = 1.0;         // Interwał co 60 klatek
 
     while (running.load())
     {
+        // Wstawianie dróg
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
             lock_guard<mutex> guard(mapLock);
@@ -70,6 +73,13 @@ void logic()
                 }
             }
             lastTimeUpdatedRoads = currentTime;
+        }
+        if (currentTime - lastTimeUpdatedTime >= intervalForUpdateTime)
+        {
+
+            lock_guard<mutex> guardTime(timeMutex);
+            timeInt++;
+            lastTimeUpdatedTime = currentTime;
         }
     }
 }

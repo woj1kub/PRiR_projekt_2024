@@ -1,6 +1,7 @@
 #include "../headers/global.h"
 
 atomic<bool> running(true); // To jest potrzebne aby po działaniu logic() można wyłączyć
+mutex timeMutex;            // Zabezpiecznie przed działaniem na mapie
 mutex mapLock;              // Zabezpiecznie przed działaniem na mapie
 
 size_t rows = 20;    // Ilość elemtów w wierszu
@@ -12,3 +13,5 @@ vector<GameCell> map;
 // Jak ktoś się chce pobawić bo nie wiem czy kamera jest 100% dobrze
 float offSetTargetWidth = -300.0f;
 float offSetTargetHeight = -50.0f;
+
+int timeInt = 25;
