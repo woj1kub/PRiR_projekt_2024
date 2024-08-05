@@ -1,85 +1,17 @@
 #include <raylib-cpp.hpp>
 #include <vector>
 #include "headers/game.h"
+#include "headers/global.h"
+#include "headers/logic.h"
 #include <iostream>
 #include <thread>
 #include <atomic>
 
 using namespace std;
-// Zmienne globalne ~ nazwy tymczasowe
-atomic<bool> running(true); // To jest potrzebne aby po działaniu logic() można wyłączyć
-mutex mapLock;              // Zabezpiecznie przed działaniem na mapie
+// Zmienne globalne ~ nazwy tymczasowe 
+// Zmienna globalne znajdują się w global.h
+// Logic znajduje się w logic.h
 
-size_t rows = 20;    // Ilość elemtów w wierszu
-size_t columns = 15; // Ilość elementów w kolumnie
-
-vector<GameCell> map; 
-
-// To jest offset potrzebny aby było mniejwięcej po środku
-// Jak ktoś się chce pobawić bo nie wiem czy kamera jest 100% dobrze
-float offSetTargetWidth = -300.0f;
-float offSetTargetHeight = -50.0f;
-
-// To jak chcecie można przeżucyć do własnego pliku
-void logic()
-{
-    while (running.load())
-    {
-        lock_guard<mutex> guard(mapLock);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-        {
-            Vector2 mousePosition = GetMousePosition();
-            int pos = ((int)(mousePosition.y + offSetTargetHeight) / CellSize) + (columns * ((int)(mousePosition.x + offSetTargetWidth) / CellSize));
-            char roads = 0b0;
-            if (!map[pos].hasBuilding())
-            {
-                map[pos].setRoad(0);
-            }
-        }
-
-        // Auktulizacja dróg
-        // To mozna przerobić na równoległe
-        // Podzielić na wiersze lub kolumny ~ żeby było że zostało wykorzystane
-        for (int i = 0; i < rows * columns; i++)
-        {
-            if (map[i].isRoad())
-            {
-                char road = 0b0;
-                int position = (map[i].getPosY()) + ((map[i].getPosX()) * columns);
-
-                // prawa
-                int neighborPos = position + columns;
-                if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosX() < rows)
-                {
-                    road += map[neighborPos].hasBuilding() ? 0b1000 : 0;
-                }
-
-                // Lewa
-                neighborPos = position - columns;
-                if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosX() > 0)
-                {
-                    road += map[neighborPos].hasBuilding() ? 0b0100 : 0;
-                }
-
-                // Góra
-                neighborPos = position - 1;
-                if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosY() > 0)
-                {
-                    road += map[neighborPos].hasBuilding() ? 0b0001 : 0;
-                }
-
-                // Dół
-                neighborPos = position + 1;
-                if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosY() < columns - 1)
-                {
-                    road += map[neighborPos].hasBuilding() ? 0b0010 : 0;
-                }
-
-                map[i].setRoad(road);
-            }
-        }
-    }
-}
 
 int main()
 {
@@ -109,7 +41,7 @@ int main()
         }
     }
 
-    // Przykładowe użycie 
+    // Przykładowe użycie
     // Można zrobić tutaj początkowy stan mapy
     map[10].setHome();
     map[11].setShop();

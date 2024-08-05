@@ -1,5 +1,6 @@
 #include <raylib-cpp.hpp>
 #include <mutex>
+using namespace std;
 #ifndef GAME
 #define GAME
 #define CellSize 50
@@ -41,6 +42,13 @@ public:
 
 class GameCell
 {
+
+private:
+    short posX;
+    short posY;
+    Building *building;
+    mutex lockBuilding;
+
 public:
     GameCell(const GameCell &) = delete;            // No copying
     GameCell &operator=(const GameCell &) = delete; // No copying
@@ -52,6 +60,7 @@ public:
     bool hasBuilding();
     bool isRoad()
     {
+        lock_guard<mutex> lock(lockBuilding);
         return typeid(*building) == typeid(Road);
     }
     void drawCell();
@@ -60,11 +69,5 @@ public:
     void setRoad(char roads);
     short getPosX() { return posX; }
     short getPosY() { return posY; }
-
-private:
-    short posX;
-    short posY;
-    Building *building;
-    std::mutex lockBuilding;
 };
 #endif // GAME
