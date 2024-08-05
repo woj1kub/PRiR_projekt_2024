@@ -21,4 +21,5 @@ extern float offSetTargetWidth;
 extern float offSetTargetHeight;
 
 extern int timeInt;
+extern int seed;
 #endif // GLOBAL

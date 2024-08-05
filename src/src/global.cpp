@@ -15,3 +15,5 @@ float offSetTargetWidth = -300.0f;
 float offSetTargetHeight = -50.0f;
 
 int timeInt = 25;
+
+int seed = time(0);

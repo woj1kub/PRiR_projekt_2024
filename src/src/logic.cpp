@@ -74,6 +74,7 @@ void logic()
             }
             lastTimeUpdatedRoads = currentTime;
         }
+        // Dodawanie czasu na ten moment (1s). Trzeba inaczej to zrobić
         if (currentTime - lastTimeUpdatedTime >= intervalForUpdateTime)
         {
 

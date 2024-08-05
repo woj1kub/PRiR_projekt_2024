@@ -41,21 +41,10 @@ int main()
         }
     }
 
-    // Przykładowe użycie
-    // Można zrobić tutaj początkowy stan mapy
-    map[10].setHome();
-    map[11].setShop();
-    map[12].setRoad(0b0001);
-    map[13].setRoad(0b0011);
-    map[14].setRoad(0b0111);
-    map[15].setRoad(0b1111);
-    map[16].setRoad(0b0);
-
     SetTargetFPS(60);
     thread logicThread(logic);
     thread generateCellThread(generate_cell);
     // Main game loop
-
     while (!w.ShouldClose()) // Detect window close button or ESC key
     {
         // Draw
