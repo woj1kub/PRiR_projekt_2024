@@ -22,6 +22,7 @@ void logic()
                 if (!map[pos].hasBuilding() && leftRoadsTiles > 0)
                 {
                     map[pos].setRoad(0);
+                    leftRoadsTiles.fetch_sub(1);
                 }
             }
         }

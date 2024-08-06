@@ -186,6 +186,7 @@ void Road::drawBuilding(short x, short y)
     {
         DrawLineEx({(float)centerX, (float)centerY}, {(float)((x * CellSize) + CellSize), (float)centerY}, sizeRoad, BLACK); // w prawo
     }
+    
 }
 
 GameCell::GameCell(short X, short Y)
@@ -254,5 +255,4 @@ void GameCell::setRoad(char roads)
     lock_guard<mutex> lock(lockBuilding);
     delete building;
     building = new Road(roads);
-    leftRoadsTiles -= 1;
 }

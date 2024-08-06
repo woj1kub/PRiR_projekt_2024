@@ -1,8 +1,9 @@
 #include "../headers/cell_generation.h"
 #include "../headers/randoms.h"
+#include "../headers/global.h"
 void generate_cell()
 {
-
+    
     double lastTimeUpdatedBuildings = GetTime();            // Pobranie początkowego czasu
     const double intervalForUpdateBuildings = 200.0 / 60.0; // Interwał co 200 klatek
     int houseNumberPerOneShop = 5;
@@ -31,6 +32,7 @@ void generate_cell()
                 map[positionOfNextBuilding].setHome();
                 countOfBuildings++;
             }
+            leftRoadsTiles += 10;
             lastTimeUpdatedBuildings = GetTime();
         }
     }

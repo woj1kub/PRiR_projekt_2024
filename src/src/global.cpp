@@ -18,4 +18,5 @@ int timeInt = 90;
 
 int seed = time(0);
 
-atomic<int> leftRoadsTiles(0);
+atomic<int> leftRoadsTiles(10);
+
