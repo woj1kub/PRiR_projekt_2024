@@ -4,7 +4,7 @@ atomic<bool> running(true); // To jest potrzebne aby po działaniu logic() możn
 mutex timeMutex;            // Zabezpiecznie przed działaniem na mapie
 mutex mapLock;              // Zabezpiecznie przed działaniem na mapie
 
-size_t rows = 20;    // Ilość elemtów w wierszu
+size_t rows = 15;    // Ilość elemtów w wierszu
 size_t columns = 15; // Ilość elementów w kolumnie
 
 vector<GameCell> map;
@@ -18,5 +18,5 @@ int timeInt = 90;
 
 int seed = time(0);
 
-atomic<int> leftRoadsTiles(10);
+atomic<int> leftRoadsTiles(0);
 

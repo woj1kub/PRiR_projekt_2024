@@ -26,98 +26,86 @@ bool GameCell::isHome()
     return typeid(*building) == typeid(Home);
 }
 
-std::vector<GameCell *> GameCell::getNeighbors()
+vector<GameCell *> GameCell::getNeighbors()
 {
-    std::vector<GameCell *> neighbors;
+    vector<GameCell *> neighbors;
     int position = (posX * columns) + posY;
 
     // prawa (right)
     int neighborPos = position + columns;
-    if (posX < rows - 1 && neighborPos >= 0 && neighborPos < rows * columns)
+    if (neighborPos >= 0 && neighborPos < rows * columns && posX < rows - 1)
     {
         neighbors.push_back(&map[neighborPos]);
     }
 
     // lewa (left)
     neighborPos = position - columns;
-    if (posX > 0 && neighborPos >= 0 && neighborPos < rows * columns)
+    if (neighborPos >= 0 && neighborPos < rows * columns && posX > 0)
     {
         neighbors.push_back(&map[neighborPos]);
     }
 
     // góra (up)
     neighborPos = position - 1;
-    if (posY > 0 && neighborPos >= 0 && neighborPos < rows * columns)
+    if (neighborPos >= 0 && neighborPos < rows * columns && posY > 0)
     {
         neighbors.push_back(&map[neighborPos]);
     }
 
     // dół (down)
     neighborPos = position + 1;
-    if (posY < columns - 1 && neighborPos >= 0 && neighborPos < rows * columns)
+    if (neighborPos >= 0 && neighborPos < rows * columns && posY < columns - 1)
     {
         neighbors.push_back(&map[neighborPos]);
     }
 
     return neighbors;
 }
+
 int GameCell::findAllPathsToNearestShop()
 {
-    std::queue<std::pair<GameCell *, int>> queue;
-    std::unordered_map<GameCell *, int> distances;
-    std::unordered_map<GameCell *, int> paths;
+    queue<pair<GameCell *, int>> queue;
+    unordered_map<GameCell *, int> distances;
 
     queue.push({this, 0});
     distances[this] = 0;
-    paths[this] = 1;
 
-    int minDistance = std::numeric_limits<int>::max();
-    int pathCount = 0;
-
+    int minDistance = numeric_limits<int>::max();
     while (!queue.empty())
     {
         auto [current, distance] = queue.front();
         queue.pop();
 
-        if (current->isShop())
+        if (current->isShop() || current->isRoad())
         {
             if (distance < minDistance)
             {
                 minDistance = distance;
-                pathCount = paths[current];
             }
-            else if (distance == minDistance)
-            {
-                pathCount += paths[current];
-            }
-            continue;
         }
 
         for (GameCell *neighbor : current->getNeighbors())
         {
-            if (neighbor->isRoadOrEmpty())
+            if (neighbor->isRoadOrEmpty() || neighbor->isShop())
             {
                 int newDistance = distance + 1;
-                if (distances.find(neighbor) == distances.end())
+
+                if (distances.find(neighbor) == distances.end() || newDistance < distances[neighbor])
                 {
                     distances[neighbor] = newDistance;
-                    paths[neighbor] = paths[current];
                     queue.push({neighbor, newDistance});
-                }
-                else if (newDistance == distances[neighbor])
-                {
-                    paths[neighbor] += paths[current];
                 }
             }
         }
     }
 
-    return pathCount;
+    return (minDistance == numeric_limits<int>::max()) ? -1 : minDistance - 1;
 }
 
 bool GameCell::checkConnectionToStore()
 {
-    return findAllPathsToNearestShop() > 0;
+    lock_guard lock(mapLock);
+    return findAllPathsToNearestShop() == 0;
 }
 
 bool GameCell::hasBuilding()
@@ -186,7 +174,6 @@ void Road::drawBuilding(short x, short y)
     {
         DrawLineEx({(float)centerX, (float)centerY}, {(float)((x * CellSize) + CellSize), (float)centerY}, sizeRoad, BLACK); // w prawo
     }
-    
 }
 
 GameCell::GameCell(short X, short Y)
@@ -229,7 +216,7 @@ void GameCell::drawCell()
 
 void GameCell::updateConnectionStatus()
 {
-    isConnectedToStore = findAllPathsToNearestShop() > 0;
+    isConnectedToStore = findAllPathsToNearestShop() == 0;
 }
 
 void GameCell::setHome()
@@ -239,8 +226,8 @@ void GameCell::setHome()
     building = new Home();
     lock.unlock();
     int pathsToShop = findAllPathsToNearestShop();
-    leftRoadsTiles += pathsToShop;
-    isConnectedToStore = pathsToShop > 0;
+    leftRoadsTiles.fetch_add(pathsToShop);
+    isConnectedToStore = pathsToShop == 0;
 }
 
 void GameCell::setShop()
@@ -255,4 +242,11 @@ void GameCell::setRoad(char roads)
     lock_guard<mutex> lock(lockBuilding);
     delete building;
     building = new Road(roads);
+}
+
+void GameCell::setEmpty()
+{
+    lock_guard<mutex> lock(lockBuilding);
+    delete building;
+    building = new Building();
 }

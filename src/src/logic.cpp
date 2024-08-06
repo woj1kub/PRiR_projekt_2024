@@ -27,6 +27,22 @@ void logic()
             }
         }
 
+        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+        {
+            lock_guard<mutex> guard(mapLock);
+            Vector2 mousePosition = GetMousePosition();
+            int pos = ((int)(mousePosition.y + offSetTargetHeight) / CellSize) + (columns * ((int)(mousePosition.x + offSetTargetWidth) / CellSize));
+
+            int max = rows * columns;
+            if (pos < columns * rows && pos >= 0)
+            {
+                if (map[pos].isRoad())
+                {
+                    map[pos].setEmpty();
+                    leftRoadsTiles.fetch_add(1);
+                }
+            }
+        }
         // Auktulizacja dróg
         // To mozna przerobić na równoległe
         // Podzielić na wiersze lub kolumny ~ żeby było że zostało wykorzystane
@@ -61,7 +77,7 @@ void logic()
 
                     // prawa
                     int neighborPos = position + columns;
-                    if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosX() < rows)
+                    if (neighborPos >= 0 && neighborPos < rows * columns && map[i].getPosX() < rows - 1)
                     {
                         road += map[neighborPos].hasBuilding() ? 0b1000 : 0;
                     }
@@ -96,6 +112,7 @@ void logic()
         // Dodawanie czasu na ten moment (1s). Trzeba inaczej to zrobić
         if (currentTime - lastTimeUpdatedTime >= intervalForUpdateTime && notConnected)
         {
+
             lock_guard<mutex> guardTime(timeMutex);
             timeInt--;
             lastTimeUpdatedTime = currentTime;

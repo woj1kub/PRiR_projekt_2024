@@ -3,7 +3,7 @@
         {
             "type": "shell",
             "label": "run the makefile",
-            "command": "d:/msys/ucrt64/bin/mingw32-make.exe",
+            "command": "c:/msys64/ucrt64/bin/mingw32-make.exe",
             "args": [""],
             "problemMatcher": [],
         }

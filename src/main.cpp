@@ -67,7 +67,6 @@ int main()
         string seedString = to_string(seed);
         DrawText("Seed", 1050, 60, 30.0f, BLACK);
         DrawText(seedString.c_str(), 1050, 90, 30.0f, BLACK);
-
         string leftRoadsTilesString = to_string(leftRoadsTiles);
         DrawText("Roads Tiles", 1050, 120, 30.0f, BLACK);
         DrawText(leftRoadsTilesString.c_str(), 1050, 150, 30.0f, BLACK);

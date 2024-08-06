@@ -1,11 +1,10 @@
 #include "../headers/cell_generation.h"
 #include "../headers/randoms.h"
-#include "../headers/global.h"
 void generate_cell()
 {
-    
-    double lastTimeUpdatedBuildings = GetTime();            // Pobranie początkowego czasu
-    const double intervalForUpdateBuildings = 200.0 / 60.0; // Interwał co 200 klatek
+
+    double lastTimeUpdatedBuildings = GetTime(); // Pobranie początkowego czasu
+    const double intervalForUpdateBuildings = 200.0 / 60.0;
     int houseNumberPerOneShop = 5;
     int countOfBuildings = 0;
     while (running.load())
@@ -19,7 +18,7 @@ void generate_cell()
             do
             {
                 positionOfNextBuilding = generate_random_number(0, rows * columns);
-            } while (!map[positionOfNextBuilding].isRoadOrEmpty());
+            } while (map[positionOfNextBuilding].hasBuilding());
 
             // Ale tutaj już pracować na globalnej mapie
             if (countOfBuildings % houseNumberPerOneShop == 0)
@@ -32,7 +31,7 @@ void generate_cell()
                 map[positionOfNextBuilding].setHome();
                 countOfBuildings++;
             }
-            leftRoadsTiles += 10;
+
             lastTimeUpdatedBuildings = GetTime();
         }
     }

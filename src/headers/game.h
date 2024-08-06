@@ -78,6 +78,7 @@ public:
     void setHome();
     void setShop();
     void setRoad(char roads);
+    void setEmpty();
     short getPosX() { return posX; }
     short getPosY() { return posY; }
 };
