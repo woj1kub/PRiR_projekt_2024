@@ -4,7 +4,7 @@ void generate_cell()
 {
 
     double lastTimeUpdatedBuildings = GetTime();            // Pobranie początkowego czasu
-    const double intervalForUpdateBuildings = 300.0 / 60.0; // Interwał co 300 klatek
+    const double intervalForUpdateBuildings = 200.0 / 60.0; // Interwał co 200 klatek
     int houseNumberPerOneShop = 5;
     int countOfBuildings = 0;
     while (running.load())

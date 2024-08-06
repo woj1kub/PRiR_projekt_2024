@@ -22,4 +22,6 @@ extern float offSetTargetHeight;
 
 extern int timeInt;
 extern int seed;
+extern atomic<int> leftRoadsTiles;
+
 #endif // GLOBAL

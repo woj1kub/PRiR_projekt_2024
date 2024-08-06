@@ -1,5 +1,8 @@
 #include <raylib-cpp.hpp>
 #include <mutex>
+#include <queue>
+#include <set>
+#include <unordered_map>
 using namespace std;
 #ifndef GAME
 #define GAME
@@ -48,7 +51,7 @@ private:
     short posY;
     Building *building;
     mutex lockBuilding;
-
+    bool isConnectedToStore = true; // To będzie potrzebne do sprawdzania czy dom jest podłączony do sklepu
 public:
     // To jest zrobione aby działało :)
     GameCell(const GameCell &) = delete;            // No copying
@@ -59,17 +62,19 @@ public:
 
     GameCell(short X, short Y);
     bool hasBuilding();
-    bool isRoad()
-    {
-        lock_guard<mutex> lock(lockBuilding);
-        return typeid(*building) == typeid(Road);
-    }
-    bool isRoadOrEmpty()
-    {
-        lock_guard<mutex> lock(lockBuilding);
-        return typeid(*building) == typeid(Road) || typeid(*building) == typeid(Building);
-    }
+    bool isRoad();
+    bool isRoadOrEmpty();
+    bool isShop();
+    bool isHome();
+    vector<GameCell *> getNeighbors();
+
+    int findAllPathsToNearestShop();
+
+    bool checkConnectionToStore();
+
+    bool getIsConnectedToStore() { return isConnectedToStore; }
     void drawCell();
+    void updateConnectionStatus();
     void setHome();
     void setShop();
     void setRoad(char roads);

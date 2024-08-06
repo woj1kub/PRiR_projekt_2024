@@ -1,4 +1,5 @@
 #include "../headers/logic.h"
+
 void logic()
 {
     double lastTimeUpdatedRoads = GetTime();          // Pobranie początkowego czasu
@@ -18,7 +19,7 @@ void logic()
             int max = rows * columns;
             if (pos < columns * rows && pos >= 0)
             {
-                if (!map[pos].hasBuilding())
+                if (!map[pos].hasBuilding() && leftRoadsTiles > 0)
                 {
                     map[pos].setRoad(0);
                 }
@@ -29,13 +30,29 @@ void logic()
         // To mozna przerobić na równoległe
         // Podzielić na wiersze lub kolumny ~ żeby było że zostało wykorzystane
         // Można to tak przerobić aby działo się tylko przy setach z GameCell
+        // od razu sprawdzamy czy jest połączone w tym mniejscu bo i tak lecimy po mapie
+
         double currentTime = GetTime();
+        bool notConnected = false;
 
         if (currentTime - lastTimeUpdatedRoads >= intervalForUpdateRoads)
         {
             lock_guard<mutex> guard(mapLock);
             for (int i = 0; i < rows * columns; i++)
             {
+                if (map[i].isHome())
+                {
+                    map[i].updateConnectionStatus();
+                }
+
+                if (!notConnected)
+                {
+                    if (!map[i].getIsConnectedToStore())
+                    {
+                        notConnected = true;
+                    }
+                }
+
                 if (map[i].isRoad())
                 {
                     char road = 0b0;
@@ -74,12 +91,12 @@ void logic()
             }
             lastTimeUpdatedRoads = currentTime;
         }
-        // Dodawanie czasu na ten moment (1s). Trzeba inaczej to zrobić
-        if (currentTime - lastTimeUpdatedTime >= intervalForUpdateTime)
-        {
 
+        // Dodawanie czasu na ten moment (1s). Trzeba inaczej to zrobić
+        if (currentTime - lastTimeUpdatedTime >= intervalForUpdateTime && notConnected)
+        {
             lock_guard<mutex> guardTime(timeMutex);
-            timeInt++;
+            timeInt--;
             lastTimeUpdatedTime = currentTime;
         }
     }

@@ -54,7 +54,6 @@ int main()
         // Rysowanie całej mapy
         {
             lock_guard<mutex> guard(mapLock);
-
             for (auto &&i : map) // To można zostawić
             {
                 i.drawCell();
@@ -63,8 +62,16 @@ int main()
         {
             lock_guard<mutex> guardTime(timeMutex);
             string timeString = to_string(timeInt);
-            DrawText(timeString.c_str(), -60, 0, 50.0f, BLACK);
+            DrawText(timeString.c_str(), 1050, 0, 50.0f, BLACK);
         }
+        string seedString = to_string(seed);
+        DrawText("Seed", 1050, 60, 30.0f, BLACK);
+        DrawText(seedString.c_str(), 1050, 90, 30.0f, BLACK);
+
+        string leftRoadsTilesString = to_string(leftRoadsTiles);
+        DrawText("Roads Tiles", 1050, 120, 30.0f, BLACK);
+        DrawText(leftRoadsTilesString.c_str(), 1050, 150, 30.0f, BLACK);
+
         EndMode2D();
         EndDrawing();
     }
