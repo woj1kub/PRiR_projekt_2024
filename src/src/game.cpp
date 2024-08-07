@@ -249,4 +249,5 @@ void GameCell::setEmpty()
     lock_guard<mutex> lock(lockBuilding);
     delete building;
     building = new Building();
+    isConnectedToStore = true;
 }

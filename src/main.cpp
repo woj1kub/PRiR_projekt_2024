@@ -74,19 +74,59 @@ int main()
             // Tu dodać rysowanie okna powiadomienia o zakończenia gry oraz przegranej punkty
             // Trzeba dodac rysowanie guzików oraz ich wykrycie w "logic".
             int positionX = 350, positionY = 200, witdh = 300, height = 200;
+            int buttonH = 45;
+            int buttonW = 100;
+            int greenButtonX = positionX + 15, greenButtonY = positionY + height - 60;
+            int redButtonX = positionX + witdh - 115, redButtonY = positionY + height - 60;
+            int buttonTextSize = 25;
+            string pointsString = "Zdobyte punkty: " + to_string(Points.load());
 
             DrawRectangle(positionX, positionY, witdh, height, GRAY);
             DrawRectangleLines(positionX, positionY, witdh, height, BLACK);
             DrawText("Przegrales :(", positionX + 15, positionY + 45, 40, RED);
+            DrawText(pointsString.c_str(), positionX + 15, positionY + 90, 25, BLACK);
 
-            DrawRectangle(positionX + 15, positionY + height - 60, 100, 45, DARKGREEN);
-            DrawRectangleLines(positionX + 15, positionY + height - 60, 100, 45, BLACK);
-            DrawText("Znowu", positionX + 27, positionY + height - 50, 25, WHITE);
+            DrawRectangle(greenButtonX, greenButtonY, buttonW, buttonH, DARKGREEN);
+            DrawRectangleLines(greenButtonX, greenButtonY, buttonW, buttonH, BLACK);
+            DrawText("Znowu", greenButtonX + 12, greenButtonY + 10, buttonTextSize, WHITE);
 
-            DrawRectangle(positionX + witdh - 115, positionY + height - 60, 100, 45, MAROON);
-            DrawRectangleLines(positionX + witdh - 115, positionY + height - 60, 100, 45, BLACK);
-            DrawText("Wyjdz", positionX + witdh - 100 , positionY + height - 50 , 25, WHITE);
+            DrawRectangle(redButtonX, redButtonY, buttonW, buttonH, MAROON);
+            DrawRectangleLines(redButtonX, redButtonY, buttonW, buttonH, BLACK);
+            DrawText("Wyjdz", redButtonX + 15, redButtonY + 10, buttonTextSize, WHITE);
 
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                Vector2 mousePosition = GetMousePosition();
+                mousePosition.x += offSetTargetWidth;
+                mousePosition.y += offSetTargetHeight;
+                if (mousePosition.x > greenButtonX && mousePosition.x < greenButtonX + buttonW && mousePosition.y > greenButtonY && mousePosition.y < greenButtonY + buttonH)
+                {
+                    timeInt = 50; // Taki sam jaki ustawimy na stracie. Można do tego inaczej zrobić że jest ustawiana w menu startowym
+                    lock_guard<mutex> lock(mapLock);
+                    for (auto &&i : map)
+                    {
+                        i.setEmpty();
+                    }
+                    Points.store(0);
+                    leftRoadsTiles.store(0);
+                    seed = time(0);
+                    generator = mt19937(static_cast<unsigned int>(seed));
+                    running.store(false);
+
+                    logicThread.join();
+                    generateCellThread.join();
+                    running.store(true);
+                    logicThread = thread(logic);
+                    generateCellThread = thread(generate_cell);
+                    loseState.store(false);
+                }
+                if (mousePosition.x > redButtonX && mousePosition.x < redButtonX + buttonW && mousePosition.y > redButtonY && mousePosition.y < redButtonY + buttonH)
+                {
+                    // Funkcja przy robieniu czegoś z czerwonym guzikiem
+                    w.Close();
+                    break;
+                }
+            }
         }
 
         EndMode2D();
