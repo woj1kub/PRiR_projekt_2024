@@ -19,7 +19,6 @@ int main()
     int screenWidth = 1600;
     int screenHeight = 900;
     raylib::Window w(screenWidth, screenHeight, "Road Maker Speedrun");
-
     InitAudioDevice();
 
     Sound bgMusic = LoadSound("assets/audio/chipi.wav");
@@ -74,8 +73,20 @@ int main()
         {
             // Tu dodać rysowanie okna powiadomienia o zakończenia gry oraz przegranej punkty
             // Trzeba dodac rysowanie guzików oraz ich wykrycie w "logic".
-            DrawRectangle(400,300,500,300,GRAY);
-            DrawRectangleLines(400,300,500,300,BLACK);
+            int positionX = 350, positionY = 200, witdh = 300, height = 200;
+
+            DrawRectangle(positionX, positionY, witdh, height, GRAY);
+            DrawRectangleLines(positionX, positionY, witdh, height, BLACK);
+            DrawText("Przegrales :(", positionX + 15, positionY + 45, 40, RED);
+
+            DrawRectangle(positionX + 15, positionY + height - 60, 100, 45, DARKGREEN);
+            DrawRectangleLines(positionX + 15, positionY + height - 60, 100, 45, BLACK);
+            DrawText("Znowu", positionX + 27, positionY + height - 50, 25, WHITE);
+
+            DrawRectangle(positionX + witdh - 115, positionY + height - 60, 100, 45, MAROON);
+            DrawRectangleLines(positionX + witdh - 115, positionY + height - 60, 100, 45, BLACK);
+            DrawText("Wyjdz", positionX + witdh - 100 , positionY + height - 50 , 25, WHITE);
+
         }
 
         EndMode2D();

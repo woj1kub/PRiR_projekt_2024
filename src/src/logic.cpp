@@ -9,11 +9,13 @@ void logic()
 
     while (running.load())
     {
-        if (loseState==true)
+        if (loseState == true)
         {
+            // Tu dodać klikanie na ekranie jeśli jest koniec gry. 
+            // Coś podobnego trzeba zrobić jako menu. 
             continue;
         }
-        
+
         // Wstawianie dróg
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
@@ -122,12 +124,10 @@ void logic()
             timeInt--;
             lastTimeUpdatedTime = currentTime;
         }
-        
+
         if (timeInt == 0)
         {
             loseState.store(true);
         }
-        
- 
     }
 }
