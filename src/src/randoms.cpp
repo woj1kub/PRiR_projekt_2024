@@ -1,9 +1,8 @@
-#include "../headers/randoms.h"
 #include "../headers/global.h"
+#include "../headers/randoms.h"
 #include <random>
 #include <ctime>
 
-std::mt19937 generator(static_cast<unsigned int>(seed));
 
 int generate_random_number(int min, int max)
 {

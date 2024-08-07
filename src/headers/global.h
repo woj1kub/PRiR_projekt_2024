@@ -2,6 +2,7 @@
 #include <mutex>
 #include <vector>
 #include "game.h"
+#include <random>
 
 using namespace std;
 #ifndef GLOBAL
@@ -21,7 +22,8 @@ extern float offSetTargetWidth;
 extern float offSetTargetHeight;
 
 extern int timeInt;
-extern int seed;
+extern unsigned int seed;
 extern atomic<int> leftRoadsTiles;
+extern mt19937 generator;
 
 #endif // GLOBAL

@@ -16,11 +16,9 @@ using namespace std;
 int main()
 {
     // Initialization
-
     int screenWidth = 1600;
     int screenHeight = 900;
-    raylib::Color textColor(LIGHTGRAY);
-    raylib::Window w(screenWidth, screenHeight, "Raylib C++ Starter Kit Example");
+    raylib::Window w(screenWidth, screenHeight, "Road Maker Speedrun");
 
     InitAudioDevice();
 
@@ -51,10 +49,10 @@ int main()
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode2D(camera);
-        // Rysowanie całej mapy
+
         {
             lock_guard<mutex> guard(mapLock);
-            for (auto &&i : map) // To można zostawić
+            for (auto &&i : map)
             {
                 i.drawCell();
             }
@@ -64,9 +62,11 @@ int main()
             string timeString = to_string(timeInt);
             DrawText(timeString.c_str(), 1050, 0, 50.0f, BLACK);
         }
+
         string seedString = to_string(seed);
         DrawText("Seed", 1050, 60, 30.0f, BLACK);
         DrawText(seedString.c_str(), 1050, 90, 30.0f, BLACK);
+
         string leftRoadsTilesString = to_string(leftRoadsTiles);
         DrawText("Roads Tiles", 1050, 120, 30.0f, BLACK);
         DrawText(leftRoadsTilesString.c_str(), 1050, 150, 30.0f, BLACK);

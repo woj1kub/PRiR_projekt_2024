@@ -16,7 +16,8 @@ float offSetTargetHeight = -50.0f;
 
 int timeInt = 90;
 
-int seed = time(0);
+unsigned int seed = time(0);
 
 atomic<int> leftRoadsTiles(0);
 
+mt19937 generator(static_cast<unsigned int>(seed));
