@@ -49,7 +49,6 @@ int main()
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode2D(camera);
-
         {
             lock_guard<mutex> guard(mapLock);
             for (auto &&i : map)
@@ -70,6 +69,14 @@ int main()
         string leftRoadsTilesString = to_string(leftRoadsTiles);
         DrawText("Roads Tiles", 1050, 120, 30.0f, BLACK);
         DrawText(leftRoadsTilesString.c_str(), 1050, 150, 30.0f, BLACK);
+
+        if (loseState.load() == true)
+        {
+            // Tu dodać rysowanie okna powiadomienia o zakończenia gry oraz przegranej punkty
+            // Trzeba dodac rysowanie guzików oraz ich wykrycie w "logic".
+            DrawRectangle(400,300,500,300,GRAY);
+            DrawRectangleLines(400,300,500,300,BLACK);
+        }
 
         EndMode2D();
         EndDrawing();

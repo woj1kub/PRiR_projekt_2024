@@ -1,6 +1,7 @@
 #include "../headers/global.h"
 
 atomic<bool> running(true); // To jest potrzebne aby po działaniu logic() można wyłączyć
+atomic<bool> loseState(false); // To jest potrzebne aby po działaniu logic() można wyłączyć
 mutex timeMutex;            // Zabezpiecznie przed działaniem na mapie
 mutex mapLock;              // Zabezpiecznie przed działaniem na mapie
 
@@ -14,10 +15,11 @@ vector<GameCell> map;
 float offSetTargetWidth = -300.0f;
 float offSetTargetHeight = -50.0f;
 
-int timeInt = 90;
+int timeInt = 10;
 
 unsigned int seed = time(0);
 
 atomic<int> leftRoadsTiles(0);
+atomic<int> Points(0);
 
 mt19937 generator(static_cast<unsigned int>(seed));

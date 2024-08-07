@@ -9,6 +9,13 @@ void generate_cell()
     int countOfBuildings = 0;
     while (running.load())
     {
+
+        if (loseState == true)
+        {
+            Points.store(countOfBuildings);
+            continue;
+        }
+
         double currentTime = GetTime();
         if (currentTime - lastTimeUpdatedBuildings >= intervalForUpdateBuildings)
         {

@@ -9,6 +9,11 @@ void logic()
 
     while (running.load())
     {
+        if (loseState==true)
+        {
+            continue;
+        }
+        
         // Wstawianie dróg
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
@@ -117,6 +122,12 @@ void logic()
             timeInt--;
             lastTimeUpdatedTime = currentTime;
         }
+        
+        if (timeInt == 0)
+        {
+            loseState.store(true);
+        }
+        
  
     }
 }

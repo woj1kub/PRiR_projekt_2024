@@ -8,6 +8,7 @@ using namespace std;
 #ifndef GLOBAL
 #define GLOBAL
 extern atomic<bool> running; // To jest potrzebne aby po działaniu logic() można wyłączyć
+extern atomic<bool> loseState; // To jest potrzebne aby po działaniu logic() można wyłączyć
 extern mutex mapLock;        // Zabezpiecznie przed działaniem na mapie
 extern mutex timeMutex;      // Zabezpiecznie przed działaniem na mapie
 
@@ -23,6 +24,7 @@ extern float offSetTargetHeight;
 
 extern int timeInt;
 extern unsigned int seed;
+extern atomic<int> Points;
 extern atomic<int> leftRoadsTiles;
 extern mt19937 generator;
 
