@@ -5,7 +5,7 @@ DEBUG = True
 
 def save_text_to_file(text):
     now = datetime.now()
-    file_name = f'backup_{now.strftime("%Y_%m_%d_%H_%M_%S").txt}'
+    file_name = f'backup_{now.strftime("%Y_%m_%d_%H_%M_%S")}.txt'
     with open(file_name, 'w') as file:
         file.write(text)
 
@@ -13,8 +13,14 @@ def start_server(host='localhost', port=12345):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind((host, port))
         s.listen()
-        print(f'Server listening on {host}:{port}...')
+        firstRun = True
+        
         while True:
+            if firstRun:
+                print(f'Server listening on {host}:{port}...')
+                firstRun = False
+            else:
+                print(f'Server again listening on {host}:{port}...')
             conn, addr = s.accept()
             with conn:
                 print(f'Connected by {addr}')
