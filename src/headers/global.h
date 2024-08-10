@@ -24,7 +24,7 @@ extern float offSetTargetHeight;
 
 extern int timeInt;
 extern unsigned int seed;
-extern atomic<int> Points;
+extern atomic<int> points;
 extern atomic<int> leftRoadsTiles;
 extern mt19937 generator;
 

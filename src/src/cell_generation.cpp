@@ -12,7 +12,7 @@ void generate_cell()
 
         if (loseState == true)
         {
-            Points.store(countOfBuildings);
+            points.store(countOfBuildings);
             continue;
         }
 

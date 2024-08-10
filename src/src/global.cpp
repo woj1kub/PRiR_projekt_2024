@@ -20,5 +20,5 @@ int timeInt = 10;
 atomic<int> leftRoadsTiles(0);
 
 unsigned int seed = time(0);
-atomic<int> Points(0);
+atomic<int> points(0);
 mt19937 generator(static_cast<unsigned int>(seed));
