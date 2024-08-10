@@ -14,7 +14,7 @@ using namespace std;
 // Zmienna globalne znajdują się w global.h
 // Logic znajduje się w logic.h
 
-void DrawMenu(raylib::Window& w)
+void DrawMenu(raylib::Window &w)
 {
     bool inMenu = true;
     while (inMenu && !w.ShouldClose())
@@ -62,7 +62,6 @@ void DrawMenu(raylib::Window& w)
         EndDrawing();
     }
 }
-
 
 int main()
 {
@@ -156,6 +155,7 @@ int main()
                 {
                     timeInt = 50; // Taki sam jaki ustawimy na stracie. Można do tego inaczej zrobić że jest ustawiana w menu startowym
                     lock_guard<mutex> lock(mapLock);
+                    backup();
                     for (auto &&i : map)
                     {
                         i.setEmpty();
@@ -185,11 +185,11 @@ int main()
         EndMode2D();
         EndDrawing();
     }
-    backup();
     // Zamykanie programu - czynności związane z zamykaniem programu
     running.store(false);
     logicThread.join();
     generateCellThread.join();
+    backup();
     UnloadSound(bgMusic);
     CloseAudioDevice();
 

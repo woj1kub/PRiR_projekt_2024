@@ -15,7 +15,7 @@ vector<GameCell> map;
 float offSetTargetWidth = -300.0f;
 float offSetTargetHeight = -50.0f;
 
-int timeInt = 10;
+int timeInt = 50;
 
 atomic<int> leftRoadsTiles(0);
 
