@@ -93,8 +93,8 @@ $(buildDir)/%.o: src/%.cpp Makefile
 	$(CXX) -MMD -MP -c $(compileFlags) $< -o $@ $(CXXFLAGS)
 
 # Run the executable
-execute:
-	$(target) $(ARGS)
+# execute:
+# 	$(target) $(ARGS)
 
 # Clean up all relevant files
 # clean:

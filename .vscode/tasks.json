@@ -6,6 +6,9 @@
             "command": "c:/msys64/ucrt64/bin/mingw32-make.exe",
             "args": [""],
             "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
         }
     ],
     "version": "2.0.0"
