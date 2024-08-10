@@ -13,6 +13,56 @@ using namespace std;
 // Zmienna globalne znajdują się w global.h
 // Logic znajduje się w logic.h
 
+void DrawMenu(raylib::Window& w)
+{
+    bool inMenu = true;
+    while (inMenu && !w.ShouldClose())
+    {
+        // Rysowanie menu
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        int screenWidth = GetScreenWidth();
+        int screenHeight = GetScreenHeight();
+
+        // Przyciski
+        int buttonWidth = 300;
+        int buttonHeight = 60;
+        int buttonX = (screenWidth - buttonWidth) / 2;
+        int buttonPlayY = (screenHeight - buttonHeight) / 2 - 50;
+        int buttonExitY = buttonPlayY + 100;
+
+        DrawRectangle(buttonX, buttonPlayY, buttonWidth, buttonHeight, DARKGREEN);
+        DrawRectangleLines(buttonX, buttonPlayY, buttonWidth, buttonHeight, BLACK);
+        DrawText("Play", buttonX + 100, buttonPlayY + 15, 30, WHITE);
+
+        DrawRectangle(buttonX, buttonExitY, buttonWidth, buttonHeight, MAROON);
+        DrawRectangleLines(buttonX, buttonExitY, buttonWidth, buttonHeight, BLACK);
+        DrawText("Exit", buttonX + 100, buttonExitY + 15, 30, WHITE);
+
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        {
+            Vector2 mousePosition = GetMousePosition();
+
+            if (mousePosition.x > buttonX && mousePosition.x < buttonX + buttonWidth)
+            {
+                if (mousePosition.y > buttonPlayY && mousePosition.y < buttonPlayY + buttonHeight)
+                {
+                    inMenu = false; // Przejście do gry
+                }
+                else if (mousePosition.y > buttonExitY && mousePosition.y < buttonExitY + buttonHeight)
+                {
+                    w.Close(); // Zakończenie gry
+                    break;
+                }
+            }
+        }
+
+        EndDrawing();
+    }
+}
+
+
 int main()
 {
     // Initialization
@@ -20,6 +70,8 @@ int main()
     int screenHeight = 900;
     raylib::Window w(screenWidth, screenHeight, "Road Maker Speedrun");
     InitAudioDevice();
+
+    DrawMenu(w);
 
     Sound bgMusic = LoadSound("assets/audio/chipi.wav");
     PlaySound(bgMusic);
