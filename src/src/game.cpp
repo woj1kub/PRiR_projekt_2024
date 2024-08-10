@@ -176,6 +176,12 @@ void Road::drawBuilding(short x, short y)
     }
 }
 
+char Road::getRoad()
+{
+    return roads;
+}
+
+
 GameCell::GameCell(short X, short Y)
     : posX(X), posY(Y), building(new Building()) {}
 
@@ -251,3 +257,31 @@ void GameCell::setEmpty()
     building = new Building();
     isConnectedToStore = true;
 }
+
+string GameCell::toString()
+{
+    string s;
+    s.append(std::to_string(posX));
+    s.append("\n");
+    s.append(std::to_string(posY));
+    s.append("\n");
+    s.append(std::to_string(isConnectedToStore));
+    s.append("\n");
+    if (Shop* b = dynamic_cast<Shop*>(building))
+    {
+        s.append("shop\n");
+    }
+    if (Home* b = dynamic_cast<Home*>(building))
+    {
+        s.append("home\n");
+    }    
+    if (Road* b = dynamic_cast<Road*>(building))
+    {
+        s.append("road\n");
+        s.append(std::to_string(b->getRoad()));
+        s.append("\n");
+    }
+    
+    return s;
+}
+

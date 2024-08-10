@@ -4,6 +4,7 @@
 #include "headers/global.h"
 #include "headers/logic.h"
 #include "headers/cell_generation.h"
+#include "headers/backup.h"
 #include <iostream>
 #include <thread>
 #include <atomic>
@@ -184,6 +185,7 @@ int main()
         EndMode2D();
         EndDrawing();
     }
+    backup();
     // Zamykanie programu - czynności związane z zamykaniem programu
     running.store(false);
     logicThread.join();

@@ -41,12 +41,13 @@ public:
     Road(char roads) : roads(roads) {}
     // Rysowanie drogi planszy - można bez problemu zamienić na jaką teksture
     void drawBuilding(short x, short y) override;
+    char getRoad();
 };
 
 class GameCell
 {
 
-private:
+protected:
     short posX;
     short posY;
     Building *building;
@@ -81,5 +82,7 @@ public:
     void setEmpty();
     short getPosX() { return posX; }
     short getPosY() { return posY; }
+
+    string toString();
 };
 #endif // GAME
