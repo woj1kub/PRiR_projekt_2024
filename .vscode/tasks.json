@@ -4,8 +4,12 @@
             "type": "shell",
             "label": "run the makefile",
             "command": "c:/msys64/ucrt64/bin/mingw32-make.exe",
-            "args": [""],
+            "args": ["all"],
             "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "options": {
                 "cwd": "${workspaceFolder}"
             }

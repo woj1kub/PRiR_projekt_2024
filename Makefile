@@ -84,6 +84,10 @@ lib: submodules
 $(target): $(objects)
 	$(CXX) $(objects) -o $(target) $(linkFlags)
 
+# Run the executable
+run: $(target)
+	$(target)
+
 # Add all rules from dependency files
 -include $(depends)
 
