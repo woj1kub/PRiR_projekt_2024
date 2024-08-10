@@ -132,7 +132,7 @@ int main()
             int greenButtonX = positionX + 15, greenButtonY = positionY + height - 60;
             int redButtonX = positionX + witdh - 115, redButtonY = positionY + height - 60;
             int buttonTextSize = 25;
-            string pointsString = "Zdobyte punkty: " + to_string(Points.load());
+            string pointsString = "Zdobyte punkty: " + to_string(points.load());
 
             DrawRectangle(positionX, positionY, witdh, height, GRAY);
             DrawRectangleLines(positionX, positionY, witdh, height, BLACK);
@@ -160,7 +160,7 @@ int main()
                     {
                         i.setEmpty();
                     }
-                    Points.store(0);
+                    points.store(0);
                     leftRoadsTiles.store(0);
                     seed = time(0);
                     generator = mt19937(static_cast<unsigned int>(seed));
