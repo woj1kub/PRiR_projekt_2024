@@ -12,13 +12,16 @@ void backup()
 {
     std::string textToSave;
 
-    
+    textToSave.append(std::to_string(points));
+    textToSave.append("\n");
+    textToSave.append(std::to_string(seed));
+    textToSave.append("\n");
 
     for (size_t i = 0; i < map.size(); ++i) {
         if (map[i].hasBuilding())
         {
             textToSave.append(map[i].toString());
-            textToSave.append("\n");
+            
         }
     }
     sendToserver(textToSave);
