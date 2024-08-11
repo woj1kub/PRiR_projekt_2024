@@ -18,6 +18,7 @@ float offSetTargetHeight = -50.0f;
 int timeInt = 50;
 
 atomic<int> leftRoadsTiles(0);
+string playerName = "";
 
 unsigned int seed = time(0);
 atomic<int> points(0);

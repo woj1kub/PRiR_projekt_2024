@@ -125,11 +125,12 @@ int main()
         {
             // Tu dodać rysowanie okna powiadomienia o zakończenia gry oraz przegranej punkty
             // Trzeba dodac rysowanie guzików oraz ich wykrycie w "logic".
-            int positionX = 350, positionY = 200, witdh = 300, height = 200;
+            int positionX = 350, positionY = 200, witdh = 300, height = 350;
             int buttonH = 45;
             int buttonW = 100;
             int greenButtonX = positionX + 15, greenButtonY = positionY + height - 60;
             int redButtonX = positionX + witdh - 115, redButtonY = positionY + height - 60;
+            int textBoxX = positionX + 15, textBoxY = positionY + 120, witdhTextBox = 275, heightTextBox = 60, textBoxTextSize = 40;
             int buttonTextSize = 25;
             string pointsString = "Zdobyte punkty: " + to_string(points.load());
 
@@ -138,6 +139,10 @@ int main()
             DrawText("Przegrales :(", positionX + 15, positionY + 45, 40, RED);
             DrawText(pointsString.c_str(), positionX + 15, positionY + 90, 25, BLACK);
 
+            DrawRectangle(textBoxX, textBoxY, witdhTextBox, heightTextBox, WHITE);
+            DrawRectangleLines(textBoxX, textBoxY, witdhTextBox, heightTextBox, BLACK);
+            DrawText(playerName.c_str(), textBoxX + 15, textBoxY + 15, textBoxTextSize, GOLD);
+
             DrawRectangle(greenButtonX, greenButtonY, buttonW, buttonH, DARKGREEN);
             DrawRectangleLines(greenButtonX, greenButtonY, buttonW, buttonH, BLACK);
             DrawText("Znowu", greenButtonX + 12, greenButtonY + 10, buttonTextSize, WHITE);
@@ -145,6 +150,22 @@ int main()
             DrawRectangle(redButtonX, redButtonY, buttonW, buttonH, MAROON);
             DrawRectangleLines(redButtonX, redButtonY, buttonW, buttonH, BLACK);
             DrawText("Wyjdz", redButtonX + 15, redButtonY + 10, buttonTextSize, WHITE);
+            // Na ten moment 8 znaków. To można zawsze zmienić
+            if (GetCharPressed() != 0)
+            {
+                if (playerName.size() < 8)
+                {
+                    char tmp = (char)GetKeyPressed();
+                    playerName += tmp;
+                }
+            }
+            if (IsKeyPressed(KEY_BACKSPACE))
+            {
+                if (!playerName.empty())
+                {
+                    playerName.pop_back();
+                }
+            }
 
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
@@ -173,6 +194,7 @@ int main()
                     generateCellThread = thread(generate_cell);
                     loseState.store(false);
                 }
+
                 if (mousePosition.x > redButtonX && mousePosition.x < redButtonX + buttonW && mousePosition.y > redButtonY && mousePosition.y < redButtonY + buttonH)
                 {
                     // Funkcja przy robieniu czegoś z czerwonym guzikiem
