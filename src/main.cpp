@@ -17,6 +17,8 @@ using namespace std;
 void DrawMenu(raylib::Window &w)
 {
     bool inMenu = true;
+    string seedInput = "";
+    bool seedEntered = false;
     while (inMenu && !w.ShouldClose())
     {
         // Rysowanie menu
@@ -41,14 +43,37 @@ void DrawMenu(raylib::Window &w)
         DrawRectangleLines(buttonX, buttonExitY, buttonWidth, buttonHeight, BLACK);
         DrawText("Exit", buttonX + 100, buttonExitY + 15, 30, WHITE);
 
+
+        // Wpisywanie seeda (seed input)
+        int seedBoxWidth = 400;
+        int seedBoxHeight = 60;
+        int seedBoxX = (screenWidth - seedBoxWidth) / 2;
+        int seedBoxY = buttonPlayY - 100;
+
+        DrawRectangle(seedBoxX, seedBoxY, seedBoxWidth, seedBoxHeight, LIGHTGRAY);
+        DrawRectangleLines(seedBoxX, seedBoxY, seedBoxWidth, seedBoxHeight, BLACK);
+        DrawText("Enter Seed:", seedBoxX + 10, seedBoxY + 10, 30, BLACK);
+        DrawText(seedInput.c_str(), seedBoxX + 220, seedBoxY + 10, 30, DARKGRAY);
+
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
             Vector2 mousePosition = GetMousePosition();
+
+            // Seed input box clicked
+            if (mousePosition.x > seedBoxX && mousePosition.x < seedBoxX + seedBoxWidth &&
+                mousePosition.y > seedBoxY && mousePosition.y < seedBoxY + seedBoxHeight)
+            {
+                seedEntered = true;
+            }
 
             if (mousePosition.x > buttonX && mousePosition.x < buttonX + buttonWidth)
             {
                 if (mousePosition.y > buttonPlayY && mousePosition.y < buttonPlayY + buttonHeight)
                 {
+                    if (!seedInput.empty())
+                    {
+                        seed = stoi(seedInput); // Convert seed input to integer
+                    }
                     inMenu = false; // Przejście do gry
                 }
                 else if (mousePosition.y > buttonExitY && mousePosition.y < buttonExitY + buttonHeight)
@@ -56,6 +81,24 @@ void DrawMenu(raylib::Window &w)
                     w.Close(); // Zakończenie gry
                     break;
                 }
+            }
+        }
+
+        // Handle seed input
+        if (seedEntered)
+        {
+            int key = GetCharPressed();
+            while (key > 0)
+            {
+                if ((key >= 48 && key <= 57) || (key == 45)) // Only allow numeric input and hyphen for negative numbers
+                {
+                    seedInput += (char)key;
+                }
+                key = GetCharPressed();
+            }
+            if (IsKeyPressed(KEY_BACKSPACE) && !seedInput.empty())
+            {
+                seedInput.pop_back();
             }
         }
 
