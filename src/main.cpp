@@ -72,6 +72,7 @@ void DrawMenu(raylib::Window &w)
                     if (!seedInput.empty())
                     {
                         seed = stoi(seedInput);
+                        generator.seed(static_cast<unsigned int>(seed));
                     }
                     inMenu = false; // Przejście do gry
                 }
@@ -113,10 +114,10 @@ int main()
     raylib::Window w(screenWidth, screenHeight, "Road Maker Speedrun");
     InitAudioDevice();
 
-    DrawMenu(w);
-
     Sound bgMusic = LoadSound("assets/audio/chipi.wav");
     PlaySound(bgMusic);
+    DrawMenu(w);
+
 
     Camera2D camera = {0};
     camera.target = {screenWidth / 2.0f + offSetTargetWidth, screenHeight / 2.0f + offSetTargetHeight};
