@@ -59,7 +59,6 @@ void DrawMenu(raylib::Window &w)
         {
             Vector2 mousePosition = GetMousePosition();
 
-            // Seed input box clicked
             if (mousePosition.x > seedBoxX && mousePosition.x < seedBoxX + seedBoxWidth &&
                 mousePosition.y > seedBoxY && mousePosition.y < seedBoxY + seedBoxHeight)
             {
@@ -72,7 +71,7 @@ void DrawMenu(raylib::Window &w)
                 {
                     if (!seedInput.empty())
                     {
-                        seed = stoi(seedInput); // Convert seed input to integer
+                        seed = stoi(seedInput);
                     }
                     inMenu = false; // Przejście do gry
                 }
@@ -84,13 +83,13 @@ void DrawMenu(raylib::Window &w)
             }
         }
 
-        // Handle seed input
+
         if (seedEntered)
         {
             int key = GetCharPressed();
             while (key > 0)
             {
-                if ((key >= 48 && key <= 57) || (key == 45)) // Only allow numeric input and hyphen for negative numbers
+                if ((key >= 48 && key <= 57) || (key == 45))
                 {
                     seedInput += (char)key;
                 }
