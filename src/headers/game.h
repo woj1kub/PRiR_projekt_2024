@@ -71,8 +71,6 @@ public:
 
     int findAllPathsToNearestShop();
 
-    bool checkConnectionToStore();
-
     bool getIsConnectedToStore() { return isConnectedToStore; }
     void drawCell();
     void updateConnectionStatus();
@@ -84,5 +82,8 @@ public:
     short getPosY() { return posY; }
 
     string toString();
+
+private:
+    void checkConnectionToStore();
 };
 #endif // GAME

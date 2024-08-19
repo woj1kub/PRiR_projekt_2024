@@ -102,10 +102,46 @@ int GameCell::findAllPathsToNearestShop()
     return (minDistance == numeric_limits<int>::max()) ? -1 : minDistance - 1;
 }
 
-bool GameCell::checkConnectionToStore()
+void GameCell::checkConnectionToStore()
 {
-    lock_guard lock(mapLock);
-    return findAllPathsToNearestShop() == 0;
+    queue<pair<GameCell *, int>> queue;
+    unordered_map<GameCell *, int> distances;
+
+    queue.push({this, 0});
+    distances[this] = 0;
+
+    int minDistance = numeric_limits<int>::max();
+    while (!queue.empty())
+    {
+        auto [current, distance] = queue.front();
+        queue.pop();
+
+        if (current->isShop())
+        {
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                isConnectedToStore = (minDistance == numeric_limits<int>::max()) ? false : true;
+                break;
+            }
+        }
+
+        for (GameCell *neighbor : current->getNeighbors())
+        {
+            if (neighbor->isRoad() || neighbor->isShop())
+            {
+                int newDistance = distance + 1;
+
+                if (distances.find(neighbor) == distances.end() || newDistance < distances[neighbor])
+                {
+                    distances[neighbor] = newDistance;
+                    queue.push({neighbor, newDistance});
+                }
+            }
+        }
+    }
+
+    isConnectedToStore = (minDistance == numeric_limits<int>::max()) ? false : true;
 }
 
 bool GameCell::hasBuilding()
@@ -181,7 +217,6 @@ char Road::getRoad()
     return roads;
 }
 
-
 GameCell::GameCell(short X, short Y)
     : posX(X), posY(Y), building(new Building()) {}
 
@@ -222,7 +257,7 @@ void GameCell::drawCell()
 
 void GameCell::updateConnectionStatus()
 {
-    isConnectedToStore = findAllPathsToNearestShop() == 0;
+    checkConnectionToStore();
 }
 
 void GameCell::setHome()
@@ -267,21 +302,20 @@ string GameCell::toString()
     s.append("\n");
     s.append(std::to_string(isConnectedToStore));
     s.append("\n");
-    if (Shop* b = dynamic_cast<Shop*>(building))
+    if (Shop *b = dynamic_cast<Shop *>(building))
     {
         s.append("shop\n");
     }
-    if (Home* b = dynamic_cast<Home*>(building))
+    if (Home *b = dynamic_cast<Home *>(building))
     {
         s.append("home\n");
-    }    
-    if (Road* b = dynamic_cast<Road*>(building))
+    }
+    if (Road *b = dynamic_cast<Road *>(building))
     {
         s.append("road\n");
         s.append(std::to_string(b->getRoad()));
         s.append("\n");
     }
-    
+
     return s;
 }
-
