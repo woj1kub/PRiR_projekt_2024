@@ -51,7 +51,6 @@ protected:
     short posX;
     short posY;
     Building *building;
-    mutex lockBuilding;
     bool isConnectedToStore = true; // To będzie potrzebne do sprawdzania czy dom jest podłączony do sklepu
 public:
     // To jest zrobione aby działało :)
