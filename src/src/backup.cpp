@@ -12,6 +12,8 @@ void backup()
 {
     std::string textToSave;
 
+    textToSave.append(playerName);
+    textToSave.append("\n");
     textToSave.append(std::to_string(points));
     textToSave.append("\n");
     textToSave.append(std::to_string(seed));
@@ -24,7 +26,18 @@ void backup()
             
         }
     }
-    sendToserver(textToSave);
+
+    int returnCode;
+    returnCode = sendToserver(textToSave);
+    if (returnCode)
+    {
+        std::cerr << "Trying again to send backup\n";
+        returnCode = sendToserver(textToSave);
+        if (returnCode)
+        {
+            std::cerr << "Second try of backup failed -- backup omitted\n";
+        }
+    }
 }
 
 int sendToserver(string text)
