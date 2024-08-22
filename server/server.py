@@ -25,7 +25,7 @@ def start_server(host='localhost', port=12345):
             with conn:
                 print(f'Connected by {addr}')
                 while True:
-                    data = conn.recv(4096)
+                    data = conn.recv(1024)
                     if not data:
                         break
                     if DEBUG:
