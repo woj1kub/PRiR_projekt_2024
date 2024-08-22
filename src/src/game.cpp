@@ -5,24 +5,24 @@ using namespace std;
 
 bool GameCell::isRoad()
 {
-    
+    lock_guard<mutex> lock(lockBuilding);
     return typeid(*building) == typeid(Road);
 }
 bool GameCell::isRoadOrEmpty()
 {
-    
+    lock_guard<mutex> lock(lockBuilding);
     return typeid(*building) == typeid(Road) || typeid(*building) == typeid(Building);
 }
 
 bool GameCell::isShop()
 {
-    
+    lock_guard<mutex> lock(lockBuilding);
     return typeid(*building) == typeid(Shop);
 }
 
 bool GameCell::isHome()
 {
-    
+    lock_guard<mutex> lock(lockBuilding);
     return typeid(*building) == typeid(Home);
 }
 
@@ -147,7 +147,7 @@ void GameCell::checkConnectionToStore()
 bool GameCell::hasBuilding()
 {
 
-    
+    lock_guard<mutex> lock(lockBuilding);
     return typeid(*building) != typeid(Building);
 }
 
@@ -230,6 +230,10 @@ GameCell &GameCell::operator=(GameCell &&other) noexcept
 {
     if (this != &other)
     {
+        unique_lock<mutex> lock1(lockBuilding, defer_lock);
+        unique_lock<mutex> lock2(other.lockBuilding, defer_lock);
+        lock(lock1, lock2);
+
         delete building;
         posX = other.posX;
         posY = other.posY;
@@ -241,12 +245,13 @@ GameCell &GameCell::operator=(GameCell &&other) noexcept
 
 GameCell::~GameCell()
 {
+    lock_guard<mutex> lock(lockBuilding);
     delete building;
 }
 
 void GameCell::drawCell()
 {
-    
+    lock_guard<mutex> lock(lockBuilding);
     building->drawBuilding(posX, posY);
 }
 
@@ -257,9 +262,10 @@ void GameCell::updateConnectionStatus()
 
 void GameCell::setHome()
 {
-    
+    unique_lock<mutex> lock(lockBuilding);
     delete building;
     building = new Home();
+    lock.unlock();
     int pathsToShop = findAllPathsToNearestShop();
     leftRoadsTiles.fetch_add(pathsToShop);
     isConnectedToStore = pathsToShop == 0;
@@ -267,21 +273,21 @@ void GameCell::setHome()
 
 void GameCell::setShop()
 {
-    
+    lock_guard<mutex> lock(lockBuilding);
     delete building;
     building = new Shop();
 }
 
 void GameCell::setRoad(char roads)
 {
-    
+    lock_guard<mutex> lock(lockBuilding);
     delete building;
     building = new Road(roads);
 }
 
 void GameCell::setEmpty()
 {
-    
+    lock_guard<mutex> lock(lockBuilding);
     delete building;
     building = new Building();
     isConnectedToStore = true;
@@ -289,8 +295,6 @@ void GameCell::setEmpty()
 
 string GameCell::toString()
 {
-    
-
     string s;
     s.append(std::to_string(posX));
     s.append("\n");
